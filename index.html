@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0c0c0c">
+  <meta name="description" content="Watch SQILLZ on YouTube and Twitch, explore highlights, and join the creator community.">
+  <link rel="canonical" href="https://sqillz0.github.io/">
+  <link rel="icon" href="/sqillz/brand/youtube-profile-picture-80.webp">
+  <title>SQILLZ — Creator Portfolio</title>
+  <style>html,body{margin:0;background:#0c0c0c;color:#eee;color-scheme:dark}#boot{min-height:90svh;display:grid;place-content:center;gap:12px;text-align:center;font:600 17px system-ui}#boot a{color:#ff8076}</style>
+</head>
+<body>
+  <div id="root"><div id="boot"><b>SQILLZ.</b><a href="/sqillz/">Open portfolio</a></div></div>
+  <script type="module">
+    // Read the published build so both addresses always open the same release.
+    const base=new URL('/sqillz/',location.origin);
+    try {
+      const response=await fetch(base,{cache:'no-cache'});
+      if(!response.ok) throw Error('Build unavailable');
+      const page=new DOMParser().parseFromString(await response.text(),'text/html');
+      function asset(selector,attribute) {
+        const path=page.querySelector(selector)?.getAttribute(attribute);
+        if(!path) throw Error('Missing asset');
+        const url=new URL(path,base);
+        if(url.origin!==base.origin||!url.pathname.startsWith('/sqillz/assets/')) throw Error('Unexpected asset');
+        return url.href;
+      }
+      const css=document.createElement('link');
+      css.rel='stylesheet';css.href=asset('link[rel="stylesheet"]','href');
+      document.head.append(css);
+      await import(asset('script[type="module"][src]','src'));
+    } catch {
+      const link=document.querySelector('#boot a');
+      if(link) link.href=base.pathname+location.search+location.hash;
+    }
+  </script>
+</body>
+</html>
